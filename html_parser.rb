@@ -1,3 +1,4 @@
+require 'byebug'
 require_relative './node.rb'
 require_relative './parseable.rb'
 
@@ -23,7 +24,7 @@ class HTMLParser
     if nodes.length == 1
       nodes.first
     else
-      Element.new("html", {}, nodes)
+      Element.new("html", nodes, {})
     end
   end
 
@@ -37,6 +38,7 @@ class HTMLParser
 
     raise "invalid open tag" unless consume_char == ">"
 
+    # TODO: this won't work
     if tag_name == "style"
       children = parse_stylesheet
     else
@@ -64,6 +66,7 @@ class HTMLParser
 
     while !(starts_with?("</") || end_of_content?)
       consume_whitespace
+      return nodes if starts_with?("</")
       nodes.push(parse_node)
     end
 
@@ -103,7 +106,6 @@ class HTMLParser
     consume_while { |char| char =~ /\w/ }
   end
 
-
   def consume_text
     consume_while { |char| char != "<" }
   end
@@ -116,5 +118,3 @@ class HTMLParser
     next_char == "<" ? parse_element : parse_text
   end
 end
-
-puts HTMLParser.new("<html><body>Hello, world!</body><p>Hi again!</p></html>").parse.to_s

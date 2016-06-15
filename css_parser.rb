@@ -1,4 +1,3 @@
-require 'byebug'
 require_relative './parseable.rb'
 
 # h1, h2, h3 { margin: auto; color: #cc0000; }
@@ -22,12 +21,16 @@ class StyleSheet
     consume_whitespace
     until end_of_content?
       consume_whitespace
+      return if end_of_content?
       @rules << parse_rule
     end
   end
 
   def to_s
     rules.join("\n")
+  end
+
+  def inspect
   end
 
   private
@@ -48,6 +51,7 @@ class StyleSheet
       when next_char == "{"
         break
       when !valid_identifier_char?(next_char)
+        debugger
         raise "Unexpected character in selector list"
       end
     end
@@ -75,7 +79,6 @@ class StyleSheet
   def parse_declaration
     property_name = parse_identifier
     consume_whitespace
-    debugger unless next_char == ":"
     raise "invalid declaration" unless consume_char == ":"
     consume_whitespace
     value = parse_value
@@ -179,10 +182,3 @@ class Declaration
     "#{name}: #{value}"
   end
 end
-
-# styles = StyleSheet.new("
-# h1, h2, h3 { margin: auto; color: #cc0000; }
-# div.note { margin-bottom: 20px; padding: 10px; }
-# #answer { display: none; }
-# ")
-# puts styles.to_s

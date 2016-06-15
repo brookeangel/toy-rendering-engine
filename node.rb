@@ -17,7 +17,7 @@ class Node
 end
 
 class Element < Node
-  attr_reader :name, :attributes, :tag_name
+  attr_reader :attributes, :tag_name
 
   def initialize(name, children = [], attributes = {})
     @tag_name = name
