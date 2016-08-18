@@ -7,13 +7,12 @@ class StyleNode
     if !element.is_a?(Text)
       @specified_values = specified_values
       @children = element.children.map { |child| StyleNode.new(child, stylesheet) }
-      debugger
     else
       @specified_values = nil
       @children = nil
     end
   end
-  
+
   private
 
   def specified_values

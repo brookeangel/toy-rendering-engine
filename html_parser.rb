@@ -38,12 +38,7 @@ class HTMLParser
 
     raise "invalid open tag" unless consume_char == ">"
 
-    # TODO: this won't work
-    if tag_name == "style"
-      children = parse_stylesheet
-    else
-      children = parse_nodes
-    end
+    children = parse_nodes
 
     check_close_tag(tag_name)
 
